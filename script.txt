@@ -1,0 +1,21 @@
+#!/bin/bash
+
+# Check if the script is being run as root
+if [[ $EUID -ne 0 ]]; then
+   echo "This script must be run as root."
+   exit 1
+fi
+
+# Specify the service name to restart
+SERVICE_NAME="<service_name>"
+
+# Check if the service is running
+if systemctl is-active --quiet $SERVICE_NAME; then
+    echo "Restarting $SERVICE_NAME service..."
+    systemctl restart $SERVICE_NAME
+    echo "$SERVICE_NAME service restarted."
+else
+    echo "$SERVICE_NAME is not running. Starting the service..."
+    systemctl start $SERVICE_NAME
+    echo "$SERVICE_NAME service started."
+fi
